@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'Widgets/buttons.dart';
+// import 'Widgets/buttons.dart';
+import 'Screen/calculatorscreen.dart';
 void main()=>runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.grey[300]
       ),
       debugShowCheckedModeBanner: false,
-      home: Button(),     
+      home: CalculatorScreen(),     
     );
   }
 }
