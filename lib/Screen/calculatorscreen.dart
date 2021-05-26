@@ -1,6 +1,3 @@
-import 'dart:js';
-
-import 'package:calculator/Screen/scientificScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:calculator/Widgets/buttons.dart';
 import 'package:math_expressions/math_expressions.dart';
@@ -28,68 +25,62 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     "2",
     "3",
     "+",
-    "SCI",
     "0",
+    "00",
     ".",
     "=",
-    
   ];
   String userinput = '';
   String answer = '0';
 
-   gesture_detect(int index){
-     if(index == 0){
-       setState(() {
-         userinput='';
-         answer='0';
-       });
-     }
-     else if(index ==1){
+// Method For Gesture Detector
+  void gestureDetect(int index) {
+    if (index == 0) {
       setState(() {
-        if(userinput.length ==1){
+        userinput = '';
+        answer = '0';
+      });
+    } else if (index == 1) {
+      setState(() {
+        if (userinput.length == 1) {
           userinput = '';
-          answer ='0';
-        }
-        else{
-         userinput = userinput.substring(0,userinput.length-1);
-         equal();
+          answer = '0';
+        } else {
+          userinput = userinput.substring(0, userinput.length - 1);
+          equal();
         }
       });
-     }
-     else if(index == 19){
-       equal();
-     }
-     else if(index == 16){
-      // navigateToScientific();
-     }
-     else{
-       setState(() {
-         userinput = userinput +values[index];
-       });
-       
-     }
-   }
-  // navigateToScientific(){
-  //    Navigator.push(context,
-  //       MaterialPageRoute(
-  //        fullscreenDialog: true,
-  //        builder: (context)=>Scientific()
-  //        ));
-  // }
-  equal(){
-    String finalParsed = userinput;
-       print(finalParsed);
-       finalParsed =finalParsed.replaceAll('x', '*');
-        Parser p = Parser();
-        Expression exp = p.parse(finalParsed);
-        print(exp);
-        ContextModel cm = ContextModel();
-        double eval = exp.evaluate(EvaluationType.REAL, cm);
-        print(eval);
-        setState(() {
-          answer = eval.toString();
-        });
+    } else if (index == 19) {
+      equal();
+    } else {
+      setState(() {
+        userinput = userinput + values[index];
+      });
+    }
   }
+
+//  Method to Calculate
+  void equal() {
+    try {
+      String finalParsed = userinput;
+      print(finalParsed);
+      finalParsed = finalParsed.replaceAll('x', '*');
+      Parser p = Parser();
+      Expression exp = p.parse(finalParsed);
+      print(exp);
+      ContextModel cm = ContextModel();
+      double eval = exp.evaluate(EvaluationType.REAL, cm);
+      print(eval);
+      setState(() {
+        answer = eval.toString();
+      });
+    } catch (Error) {
+      setState(() {
+        answer = "Error";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -102,31 +93,39 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   flex: 2,
                   child: Column(
                     children: [
-                      Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Container(
-                            child: Text(
-                              userinput,
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: 20.0),
+                      Container(
+                        color: Color(0xfffaf0e6),
+                        child: Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: 8.0, left: 8.0, right: 8.0),
+                            child: Container(
+                              height: 120.0,
+                              child: Text(
+                                userinput,
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 30.0),
+                              ),
+                              alignment: Alignment.topLeft,
                             ),
-                            alignment: Alignment.topLeft,
                           ),
                         ),
                       ),
-                      Divider(),
                       Expanded(
                         flex: 1,
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(top: 8.0),
                           child: Container(
-                            child: Text(answer),
+                            child: Text(
+                              answer,
+                              style: TextStyle(fontSize: 20.0),
+                            ),
                             alignment: Alignment.bottomRight,
                           ),
                         ),
                       ),
+                      Divider(color: Colors.black)
                     ],
                   )),
               Expanded(
@@ -144,7 +143,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                           SizedBox(
                               child: GestureDetector(
                         onTap: () {
-                          gesture_detect(index);
+                          gestureDetect(index);
                         },
                         child: Button(
                           values[index],
